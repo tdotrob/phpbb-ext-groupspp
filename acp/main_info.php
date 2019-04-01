@@ -10,9 +10,6 @@
 
 namespace senky\groupspp\acp;
 
-/**
- * Groups++ ACP module info.
- */
 class main_info
 {
 	public function module()
