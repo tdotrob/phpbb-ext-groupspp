@@ -1,6 +1,6 @@
 services:
-    senky.groupspp.controller.main:
-        class: senky\groupspp\controller\main_controller
+    senky.groupspp.controller.select:
+        class: senky\groupspp\controller\select_controller
         arguments:
             - '@controller.helper'
             - '@user'

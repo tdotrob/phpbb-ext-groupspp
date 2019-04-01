@@ -12,7 +12,7 @@ namespace senky\groupspp\controller;
 
 use senky\groupspp\ext as constants;
 
-class main_controller
+class select_controller
 {
 	protected $helper;
 	protected $user;
