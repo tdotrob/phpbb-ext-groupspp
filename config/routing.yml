@@ -1,0 +1,3 @@
+senky_groupspp_controller:
+    path: /demo/{name}
+    defaults: { _controller: senky.groupspp.controller.main:handle }

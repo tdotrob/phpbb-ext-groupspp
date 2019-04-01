@@ -1,0 +1,28 @@
+services:
+    senky.groupspp.controller.main:
+        class: senky\groupspp\controller\main_controller
+        arguments:
+            - '@config'
+            - '@controller.helper'
+            - '@template'
+            - '@language'
+
+    senky.groupspp.controller.acp:
+        class: senky\groupspp\controller\acp_controller
+        arguments:
+            - '@config'
+            - '@language'
+            - '@log'
+            - '@request'
+            - '@template'
+            - '@user'
+
+    senky.groupspp.listener:
+        class: senky\groupspp\event\main_listener
+        arguments:
+            - '@controller.helper'
+            - '@template'
+            - '@language'
+            - '%core.php_ext%'
+        tags:
+            - { name: event.listener }
