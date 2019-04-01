@@ -33,6 +33,7 @@ services:
             - '%tables.forums%'
             - '%tables.topics_track%'
             - '%tables.forums_track%'
+            - '%tables.zebra%'
             - '%core.root_path%'
             - '%core.php_ext%'
 

@@ -31,9 +31,10 @@ class view_controller
 	protected $forums_table;
 	protected $topics_track_table;
 	protected $forums_track_table;
+	protected $zebra_table;
 	protected $root_path;
 	protected $php_ext;
-	public function __construct(\phpbb\controller\helper $helper, \phpbb\user $user, \phpbb\db\driver\driver_interface $db, \phpbb\template\template $template, \phpbb\language\language $language, \phpbb\request\request $request, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\auth\auth $auth, \phpbb\content_visibility $content_visibility, \phpbb\pagination $pagination, $topics_table, $groups_table, $user_groups_table, $forums_table, $topics_track_table, $forums_track_table, $root_path, $php_ext)
+	public function __construct(\phpbb\controller\helper $helper, \phpbb\user $user, \phpbb\db\driver\driver_interface $db, \phpbb\template\template $template, \phpbb\language\language $language, \phpbb\request\request $request, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\auth\auth $auth, \phpbb\content_visibility $content_visibility, \phpbb\pagination $pagination, $topics_table, $groups_table, $user_groups_table, $forums_table, $topics_track_table, $forums_track_table, $zebra_table, $root_path, $php_ext)
 	{
 		$this->helper = $helper;
 		$this->user = $user;
@@ -52,27 +53,33 @@ class view_controller
 		$this->forums_table = $forums_table;
 		$this->topics_track_table = $topics_track_table;
 		$this->forums_track_table = $forums_track_table;
+		$this->zebra_table = $zebra_table;
 		$this->root_path = $root_path;
 		$this->php_ext = $php_ext;
 	}
 
 	public function view()
 	{
+		// only logged in users!
 		$this->language->add_lang('viewforum');
 		if ($this->user->data['user_id'] == ANONYMOUS)
 		{
 			login_box('', $this->language->lang('LOGIN_VIEWFORUM'));
 		}
 
+		// load additional dependencies
 		if (!function_exists('topic_status'))
 		{
 			include($this->root_path . 'includes/functions_display.' . $this->php_ext);
 		}
 
+		// add lang
 		$this->language->add_lang('view', 'senky/groupspp');
 
+		// where do we start?
 		$start = $this->request->variable('start', 0);
 
+		// select user groups
 		$sql = 'SELECT g.group_name
 			FROM ' . $this->user_groups_table . ' ug
 			LEFT JOIN ' . $this->groups_table . ' g
@@ -86,6 +93,20 @@ class view_controller
 		}
 		$this->db->sql_freeresult($result);
 
+		// select user foes
+		$sql = 'SELECT zebra_id
+			FROM ' . $this->zebra_table . '
+			WHERE user_id = ' . $this->user->data['user_id'] . '
+				AND foe = 1';
+		$result = $this->db->sql_query($sql);
+		$user_foes = [];
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$user_foes[] = $row['zebra_id'];
+		}
+		$this->db->sql_freeresult($result);
+
+		// prepare main query (for pagination for now)
 		$sql_ary = [
 			'SELECT'	=> 'COUNT(t.topic_id) as topics_count',
 			'FROM'		=> [$this->topics_table => 't'],
@@ -95,7 +116,8 @@ class view_controller
 					'ON'	=> 'f.forum_id = t.forum_id',
 				]
 			],
-			'WHERE'	=> $this->db->sql_in_set('f.forum_name', $user_group_names) . '
+			'WHERE'	=> $this->db->sql_in_set('f.forum_name', $user_group_names, false, true) . '
+				AND ' . $this->db->sql_in_set('t.topic_poster', $user_foes, true, true) . '
 				AND topic_visibility = ' . ITEM_APPROVED,
 		];
 		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
@@ -103,9 +125,11 @@ class view_controller
 		$topics_count = $this->db->sql_fetchfield('topics_count');
 		$this->db->sql_freeresult($result);
 
+		// obtain icons and validate pagination start
 		$icons = $this->cache->obtain_icons();
 		$start = $this->pagination->validate_start($start, $this->config['topics_per_page'], $topics_count);
 
+		// edit query to select all we need
 		$sql_ary['SELECT'] = 't.*, f.forum_name, f.enable_icons, tt.mark_time, ft.mark_time AS forum_mark_time';
 		$sql_ary['LEFT_JOIN'][] = [
 			'FROM'	=> [$this->forums_track_table => 'ft'],
@@ -120,6 +144,7 @@ class view_controller
 		$result = $this->db->sql_query_limit($sql, $this->config['topics_per_page'], $start);
 		while ($row = $this->db->sql_fetchrow($result))
 		{
+			// is topic unread?
 			$topic_tracking_info = false;
 			if ($this->config['load_db_lastread'] && $this->user->data['is_registered'])
 			{
@@ -131,8 +156,10 @@ class view_controller
 				$topic_tracking_info = get_complete_topic_tracking($row['forum_id'], [$row['topic_id']]);
 			}
 
+			// make sure we only count visible replies
 			$replies = $this->content_visibility->get_count('topic_posts', $row, $row['forum_id']) - 1;
 
+			// moved topic fix and unread topic status
 			if ($row['topic_status'] == ITEM_MOVED)
 			{
 				$row['topic_id'] = $row['topic_moved_id'];
@@ -143,6 +170,7 @@ class view_controller
 				$unread_topic = !empty($topic_tracking_info[$row['topic_id']]) && $row['topic_last_post_time'] > $topic_tracking_info[$row['topic_id']];
 			}
 
+			// generate folder img and alt
 			$folder_img = $folder_alt = $topic_type = '';
 			topic_status($row, $replies, $unread_topic, $folder_img, $folder_alt, $topic_type);
 
@@ -169,6 +197,7 @@ class view_controller
 				'S_TOPIC_ICONS'			=> $row['enable_icons'],
 			]);
 		}
+		$this->db->sql_freeresult($result);
 
 		$this->pagination->generate_template_pagination(['routes' => ['senky_groupspp_view', 'senky_groupspp_view'], 'params'	=> []], 'pagination', 'start', $topics_count, $this->config['topics_per_page'], $start);
 		$this->template->assign_vars([
