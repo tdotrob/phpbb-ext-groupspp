@@ -1,3 +1,3 @@
-senky_groupspp_controller:
-    path: /demo/{name}
-    defaults: { _controller: senky.groupspp.controller.main:handle }
+senky_groupspp_select:
+    path: /groups/select
+    defaults: { _controller: senky.groupspp.controller.main:select }

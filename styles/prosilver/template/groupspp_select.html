@@ -1,0 +1,21 @@
+{% include 'overall_header.html' %}
+
+<h2>{{ lang('GROUPSPP_SELECT') }}</h2>
+
+<form method="POST" action="{{ U_ACTION }}" class="post bg2">
+	<div class="inner" style="columns: 3;">
+		{% for group in groups %}
+			<label for="group_{{ group.GROUP_ID }}" style="display: block; font-size: 1.3em; padding: 5px 0;">
+				<input id="group_{{ group.GROUP_ID }}" name="groups[]" value="{{ group.GROUP_ID }}" type="checkbox"{% if group.S_IS_MEMBER %} checked{% endif %} /> {{ group.GROUP_NAME }}
+			</label>
+		{% endfor %}
+	</div>
+
+	<fieldset class="submit-buttons">
+		<input type="reset" value="{L_RESET}" name="reset" class="button2" />&nbsp;
+		<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1" />
+		{{ S_FORM_TOKEN }}
+	</fieldset>
+</form>
+
+{% include 'overall_footer.html' %}

@@ -19,5 +19,7 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, array(
-	'SELECT_GROUPS'	=> 'Select groups',
+	'GROUPSPP_SELECT'		=> 'Select your groups',
+	'GROUPSPP_FORM_INVALID'	=> 'The submitted form is invalid. Please try again.<br><br><a href="%s">Back to group selection</a>',
+	'GROUPSPP_SUCCESS'		=> 'Your groups has been updated.<br><br><a href="%s">Back to group selection</a>',
 ));

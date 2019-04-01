@@ -2,10 +2,16 @@ services:
     senky.groupspp.controller.main:
         class: senky\groupspp\controller\main_controller
         arguments:
-            - '@config'
             - '@controller.helper'
+            - '@user'
+            - '@dbal.conn'
             - '@template'
             - '@language'
+            - '@request'
+            - '%tables.groups%'
+            - '%tables.user_group%'
+            - '%core.root_path%'
+            - '%core.php_ext%'
 
     senky.groupspp.controller.acp:
         class: senky\groupspp\controller\acp_controller
