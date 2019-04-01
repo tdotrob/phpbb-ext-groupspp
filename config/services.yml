@@ -10,12 +10,15 @@ services:
     senky.groupspp.controller.acp:
         class: senky\groupspp\controller\acp_controller
         arguments:
-            - '@config'
             - '@language'
-            - '@log'
             - '@request'
             - '@template'
-            - '@user'
+            - '@dbal.conn'
+            - '@cache.driver'
+            - '%tables.forums%'
+            - '%tables.groups%'
+            - '%core.root_path%'
+            - '%core.php_ext%'
 
     senky.groupspp.listener:
         class: senky\groupspp\event\main_listener

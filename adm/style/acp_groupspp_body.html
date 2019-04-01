@@ -9,20 +9,18 @@
 	</div>
 {% endif %}
 
-<form id="senky_groupspp_acp" name="senky_groupspp_acp" method="post" action="{{ U_ACTION }}">
+<form method="post" action="{{ U_ACTION }}">
 
 	<fieldset>
 		<legend>{{ lang('SETTINGS') }}</legend>
 		<dl>
-			<dt><label for="senky_groupspp_goodbye">{{ lang('ACP_GROUPSPP_GOODBYE') ~ lang('COLON') }}</label></dt>
-			<dd><label><input type="radio" class="radio" name="senky_groupspp_goodbye" value="1"{% if SENKY_GROUPSPP_GOODBYE %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="senky_groupspp_goodbye" value="0"{% if not SENKY_GROUPSPP_GOODBYE %} checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
+			<dt><label for="new_name">{{ lang('NEW_NAME') ~ lang('COLON') }}</label></dt>
+			<dd><input type="text" id="new_name" name="new_name" size="40" value="{{ NEW_NAME }}" /></dd>
 		</dl>
 	</fieldset>
 
 	<fieldset class="submit-buttons">
-		<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}" />&nbsp;
-		<input class="button2" type="submit" id="preview" name="preview" value="{{ lang('PREVIEW') }}" />
+		<input class="button1" type="submit" name="submit" value="{{ lang('ADD') }}" />
 		{{ S_FORM_TOKEN }}
 	</fieldset>
 

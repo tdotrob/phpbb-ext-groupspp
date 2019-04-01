@@ -19,8 +19,6 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, array(
-	'ACP_GROUPSPP_TITLE'	=> 'groupspp Module',
-	'ACP_GROUPSPP'			=> 'groupspp Settings',
-
-	'LOG_ACP_GROUPSPP_SETTINGS'		=> '<strong>Groups++ settings updated</strong>',
+	'ACP_GROUPSPP_TITLE'	=> 'Groups++',
+	'ACP_GROUPSPP'			=> 'Add new',
 ));
