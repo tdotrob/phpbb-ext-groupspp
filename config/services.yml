@@ -13,6 +13,29 @@ services:
             - '%core.root_path%'
             - '%core.php_ext%'
 
+    senky.groupspp.controller.view:
+        class: senky\groupspp\controller\view_controller
+        arguments:
+            - '@controller.helper'
+            - '@user'
+            - '@dbal.conn'
+            - '@template'
+            - '@language'
+            - '@request'
+            - '@cache'
+            - '@config'
+            - '@auth'
+            - '@content.visibility'
+            - '@pagination'
+            - '%tables.topics%'
+            - '%tables.groups%'
+            - '%tables.user_group%'
+            - '%tables.forums%'
+            - '%tables.topics_track%'
+            - '%tables.forums_track%'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+
     senky.groupspp.controller.acp:
         class: senky\groupspp\controller\acp_controller
         arguments:

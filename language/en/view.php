@@ -19,6 +19,6 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, array(
-	'SELECT_GROUPS'	=> 'Select groups',
-	'VIEW_GROUPS'	=> 'View groups topics',
+	'GROUPSPP_VIEW'		=> 'Your groups topics',
+	'NO_TOPICS'			=> 'There are no topics. <a href="%s">Select more groups to see topics here.</a>',
 ));

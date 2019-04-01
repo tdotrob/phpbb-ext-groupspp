@@ -1,3 +1,7 @@
 senky_groupspp_select:
     path: /groups/select
     defaults: { _controller: senky.groupspp.controller.select:select }
+
+senky_groupspp_view:
+    path: /groups/view
+    defaults: { _controller: senky.groupspp.controller.view:view }

@@ -51,6 +51,7 @@ class main_listener implements EventSubscriberInterface
 	{
 		$this->template->assign_vars(array(
 			'U_GROUPSPP_SELECT'	=> $this->helper->route('senky_groupspp_select'),
+			'U_GROUPSPP_VIEW'	=> $this->helper->route('senky_groupspp_view'),
 		));
 	}
 
