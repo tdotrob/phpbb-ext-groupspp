@@ -107,6 +107,6 @@ class select_controller
 			]);
 		}
 
-		return $this->helper->render('groupspp_select.html', '');
+		return $this->helper->render('groupspp_select.html', $this->language->lang('GROUPSPP_SELECT'));
 	}
 }
