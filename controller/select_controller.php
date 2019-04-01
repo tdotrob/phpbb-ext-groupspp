@@ -40,6 +40,11 @@ class select_controller
 
 	public function select()
 	{
+		if ($this->user->data['user_id'] == ANONYMOUS)
+		{
+			login_box();
+		}
+
 		$this->language->add_lang('select', 'senky/groupspp');
 		add_form_key('senky_groupspp_select');
 

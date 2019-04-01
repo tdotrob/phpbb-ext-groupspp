@@ -20,5 +20,5 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	'GROUPSPP_VIEW'		=> 'Your groups topics',
-	'NO_TOPICS'			=> 'There are no topics. <a href="%s">Select more groups to see topics here.</a>',
+	'NO_TOPICS'			=> 'To View Discussion Topics Please <a href="%s">Click Here</a> to Select the Forums You’re Interested In.',
 ));

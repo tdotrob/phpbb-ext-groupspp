@@ -21,4 +21,5 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'SELECT_GROUPS'	=> 'Select groups',
 	'VIEW_GROUPS'	=> 'View groups topics',
+	'BLOCK_USER'	=> 'Block User',
 ));
