@@ -84,7 +84,7 @@ class acp_controller
 
 				if (!function_exists('group_create'))
 				{
-					include($this->root_path . 'includes/functions_user.php');
+					include($this->root_path . 'includes/functions_user.' . $this->php_ext);
 				}
 				$errors = group_create($group_id, GROUP_FREE, $new_name, '', [
 					'group_rank'			=> 0,
