@@ -10,6 +10,8 @@
 
 namespace senky\groupspp\controller;
 
+use senky\groupspp\ext as constants;
+
 class acp_controller
 {
 	protected $language;
@@ -60,15 +62,10 @@ class acp_controller
 				$errors[] = $this->language->lang('FORUM_ALREADY_EXISTS');
 			}
 
-			$default_groups = [
-				$this->language->lang('G_ADMINISTRATORS'),
-				$this->language->lang('G_BOTS'),
-				$this->language->lang('G_GLOBAL_MODERATORS'),
-				$this->language->lang('G_GUESTS'),
-				$this->language->lang('G_NEWLY_REGISTERED'),
-				$this->language->lang('G_REGISTERED'),
-				$this->language->lang('G_REGISTERED_COPPA'),
-			];
+			$default_groups = array_map(function($group_name) {
+				return $this->language->lang('G_' . $group_name);
+			}, constants::DEFAULT_GROUPS);
+
 			$sql = 'SELECT group_name
 				FROM ' . $this->groups_table . "
 				WHERE group_name = '" . $this->db->sql_escape($new_name) . "'";

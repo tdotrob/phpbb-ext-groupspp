@@ -10,10 +10,10 @@
 
 namespace senky\groupspp\controller;
 
+use senky\groupspp\ext as constants;
+
 class main_controller
 {
-	const DEFAULT_GROUPS = ['ADMINISTRATORS', 'BOTS', 'GLOBAL_MODERATORS', 'GUESTS', 'NEWLY_REGISTERED', 'REGISTERED', 'REGISTERED_COPPA'];
-
 	protected $helper;
 	protected $user;
 	protected $db;
@@ -72,7 +72,7 @@ class main_controller
 			// find groups to remove
 			foreach ($user_groups as $group_id => $group_name)
 			{
-				if (!in_array($group_id, $submit_groups) && !in_array($group_name, self::DEFAULT_GROUPS))
+				if (!in_array($group_id, $submit_groups) && !in_array($group_name, constants::DEFAULT_GROUPS))
 				{
 					group_user_del($group_id, [$this->user->data['user_id']], false, false, false);
 				}
@@ -92,7 +92,7 @@ class main_controller
 
 		$sql = 'SELECT group_id, group_name
 			FROM ' . $this->groups_table . '
-			WHERE ' . $this->db->sql_in_set('group_name', self::DEFAULT_GROUPS, true) . '
+			WHERE ' . $this->db->sql_in_set('group_name', constants::DEFAULT_GROUPS, true) . '
 			ORDER BY group_name ASC';
 		$result = $this->db->sql_query($sql);
 		$groups = $this->db->sql_fetchrowset($result);
