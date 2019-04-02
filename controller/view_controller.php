@@ -58,7 +58,7 @@ class view_controller
 		$this->php_ext = $php_ext;
 	}
 
-	public function view()
+	public function view($is_index = false)
 	{
 		// only logged in users!
 		$this->language->add_lang('viewforum');
@@ -127,7 +127,7 @@ class view_controller
 
 		// obtain icons and validate pagination start
 		$icons = $this->cache->obtain_icons();
-		$start = $this->pagination->validate_start($start, $this->config['topics_per_page'], $topics_count);
+		$start = $this->pagination->validate_start($start, $this->config['senky_groupspp_per_page'], $topics_count);
 
 		// edit query to select all we need
 		$sql_ary['SELECT'] = 't.*, f.forum_name, f.enable_icons, tt.mark_time, ft.mark_time AS forum_mark_time';
@@ -141,7 +141,7 @@ class view_controller
 		];
 		$sql_ary['ORDER_BY'] = 'topic_last_post_time DESC';
 		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
-		$result = $this->db->sql_query_limit($sql, $this->config['topics_per_page'], $start);
+		$result = $this->db->sql_query_limit($sql, $this->config['senky_groupspp_per_page'], $start);
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			// is topic unread?
@@ -199,12 +199,16 @@ class view_controller
 		}
 		$this->db->sql_freeresult($result);
 
-		$this->pagination->generate_template_pagination(['routes' => ['senky_groupspp_view', 'senky_groupspp_view'], 'params'	=> []], 'pagination', 'start', $topics_count, $this->config['topics_per_page'], $start);
+		$base_url = $is_index ? append_sid($this->root_path . 'index.' . $this->php_ext) : ['routes' => ['senky_groupspp_view', 'senky_groupspp_view'], 'params' => []];
+		$this->pagination->generate_template_pagination($base_url, 'pagination', 'start', $topics_count, $this->config['senky_groupspp_per_page'], $start);
 		$this->template->assign_vars([
 			'TOTAL_TOPICS'		=> $topics_count,
 			'U_SELECT_GROUPS'	=> $this->helper->route('senky_groupspp_select'),
 		]);
 
-		return $this->helper->render('groupspp_view.html', $this->language->lang('GROUPSPP_VIEW') . ($start ? ' - ' . $this->language->lang('PAGE_TITLE_NUMBER', $this->pagination->get_on_page($this->config['topics_per_page'], $start)) : ''));
+		if (!$is_index)
+		{
+			return $this->helper->render('groupspp_view.html', $this->language->lang('GROUPSPP_VIEW') . ($start ? ' - ' . $this->language->lang('PAGE_TITLE_NUMBER', $this->pagination->get_on_page($this->config['senky_groupspp_per_page'], $start)) : ''));
+		}
 	}
 }

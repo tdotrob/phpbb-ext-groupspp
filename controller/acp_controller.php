@@ -19,18 +19,20 @@ class acp_controller
 	protected $template;
 	protected $db;
 	protected $cache;
+	protected $config;
 	protected $forums_table;
 	protected $groups_table;
 	protected $root_path;
 	protected $php_ext;
 	protected $u_action;
-	public function __construct(\phpbb\language\language $language, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\cache\driver\driver_interface $cache, $forums_table, $groups_table, $root_path, $php_ext)
+	public function __construct(\phpbb\language\language $language, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\db\driver\driver_interface $db, \phpbb\cache\driver\driver_interface $cache, \phpbb\config\config $config, $forums_table, $groups_table, $root_path, $php_ext)
 	{
 		$this->language = $language;
 		$this->request = $request;
 		$this->template = $template;
 		$this->db = $db;
 		$this->cache = $cache;
+		$this->config = $config;
 		$this->forums_table = $forums_table;
 		$this->groups_table = $groups_table;
 		$this->root_path = $root_path;
@@ -42,6 +44,13 @@ class acp_controller
 		$this->language->add_lang('acp', 'senky/groupspp');
 		add_form_key('senky_groupspp_acp');
 		$errors = [];
+
+		if ($this->request->is_set_post('settings'))
+		{
+			$this->config->set('senky_groupspp_per_page', $this->request->variable('per_page', 0));
+
+			trigger_error($this->language->lang('ACP_GROUPSPP_SAVED') . adm_back_link($this->u_action));
+		}
 
 		$new_name = $this->request->variable('new_name', '', true);
 		if ($this->request->is_set_post('submit'))
@@ -216,6 +225,7 @@ class acp_controller
 			'S_ERROR'		=> $s_errors,
 			'ERROR_MSG'		=> $s_errors ? implode('<br />', $errors) : '',
 			'NEW_NAME'		=> $new_name,
+			'PER_PAGE'		=> $this->config['senky_groupspp_per_page'],
 		));
 	}
 

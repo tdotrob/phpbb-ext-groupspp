@@ -14,16 +14,26 @@
 	<fieldset>
 		<legend>{{ lang('SETTINGS') }}</legend>
 		<dl>
+			<dt><label for="per_page">{{ lang('TOPICS_PER_PAGE') ~ lang('COLON') }}</label></dt>
+			<dd><input type="number" id="per_page" name="per_page" value="{{ PER_PAGE }}" /></dd>
+		</dl>
+		<p class="submit-buttons">
+			<input class="button1" type="submit" name="settings" value="{{ lang('SUBMIT') }}" />
+		</p>
+	</fieldset>
+
+	<fieldset>
+		<legend>{{ lang('ADD_NEW') }}</legend>
+		<dl>
 			<dt><label for="new_name">{{ lang('NEW_NAME') ~ lang('COLON') }}</label></dt>
 			<dd><input type="text" id="new_name" name="new_name" size="40" value="{{ NEW_NAME }}" /></dd>
 		</dl>
+		<p class="submit-buttons">
+			<input class="button1" type="submit" name="submit" value="{{ lang('ADD') }}" />
+		</p>
 	</fieldset>
 
-	<fieldset class="submit-buttons">
-		<input class="button1" type="submit" name="submit" value="{{ lang('ADD') }}" />
-		{{ S_FORM_TOKEN }}
-	</fieldset>
-
+	{{ S_FORM_TOKEN }}
 </form>
 
 {% include 'overall_footer.html' %}

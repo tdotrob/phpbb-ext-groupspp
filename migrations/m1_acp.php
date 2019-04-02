@@ -33,6 +33,8 @@ class m1_acp extends \phpbb\db\migration\migration
 	public function update_data()
 	{
 		return array(
+			array('config.add', array('senky_groupspp_per_page', 10)),
+
 			array('module.add', array(
 				'acp',
 				'ACP_CAT_DOT_MODS',

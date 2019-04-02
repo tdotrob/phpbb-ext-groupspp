@@ -22,4 +22,5 @@ $lang = array_merge($lang, array(
 	'SELECT_GROUPS'	=> 'Select groups',
 	'VIEW_GROUPS'	=> 'View groups topics',
 	'BLOCK_USER'	=> 'Block User',
+	'NO_FORUMS'		=> 'To View Discussion Forums Please <a href="%s">Click Here</a> to Select the Forums You’re Interested In.',
 ));

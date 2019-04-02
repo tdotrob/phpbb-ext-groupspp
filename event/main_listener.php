@@ -20,19 +20,24 @@ class main_listener implements EventSubscriberInterface
 			'core.user_setup'					=> 'load_language_on_setup',
 			'core.page_header'					=> 'add_page_header_link',
 			'core.viewtopic_modify_post_row'	=> 'add_foe_viewtopic',
+			'core.index_modify_page_title'		=> 'display_topics',
 		);
 	}
 
 	protected $helper;
 	protected $template;
 	protected $user;
+	protected $language;
+	protected $view_controller;
 	protected $root_path;
 	protected $php_ext;
-	public function __construct(\phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, $root_path, $php_ext)
+	public function __construct(\phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, \phpbb\language\language $language, \senky\groupspp\controller\view_controller $view_controller, $root_path, $php_ext)
 	{
 		$this->helper = $helper;
 		$this->template = $template;
 		$this->user = $user;
+		$this->language = $language;
+		$this->view_controller = $view_controller;
 		$this->root_path = $root_path;
 		$this->php_ext = $php_ext;
 	}
@@ -52,6 +57,7 @@ class main_listener implements EventSubscriberInterface
 		$this->template->assign_vars(array(
 			'U_GROUPSPP_SELECT'	=> $this->helper->route('senky_groupspp_select'),
 			'U_GROUPSPP_VIEW'	=> $this->helper->route('senky_groupspp_view'),
+			'L_NO_FORUMS'		=> $this->language->lang('NO_FORUMS', $this->helper->route('senky_groupspp_select')),
 		));
 	}
 
@@ -61,5 +67,10 @@ class main_listener implements EventSubscriberInterface
 		$post_row['S_ADD_FOE'] = !$event['row']['foe'] && $event['poster_id'] != $this->user->data['user_id'];
 		$post_row['U_ADD_FOE'] = append_sid($this->root_path . 'ucp.' . $this->php_ext, 'i=zebra&amp;mode=foes&amp;add=' . urlencode(htmlspecialchars_decode($event['user_poster_data']['username'])));
 		$event['post_row'] = $post_row;
+	}
+
+	public function display_topics()
+	{
+		$this->view_controller->view(true);
 	}
 }

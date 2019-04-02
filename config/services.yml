@@ -45,6 +45,7 @@ services:
             - '@template'
             - '@dbal.conn'
             - '@cache.driver'
+            - '@config'
             - '%tables.forums%'
             - '%tables.groups%'
             - '%core.root_path%'
@@ -56,6 +57,8 @@ services:
             - '@controller.helper'
             - '@template'
             - '@user'
+            - '@language'
+            - '@senky.groupspp.controller.view'
             - '%core.root_path%'
             - '%core.php_ext%'
         tags:

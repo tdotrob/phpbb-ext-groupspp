@@ -19,6 +19,9 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, array(
+	'TOPICS_PER_PAGE'		=> 'Groups++ topics per page',
+	'ACP_GROUPSPP_SAVED'	=> 'Groups++ settings has been saved.',
+	'ADD_NEW'				=> 'Add new',
 	'NEW_NAME'				=> 'New Groups++ group/forum name',
 	'FORUM_ALREADY_EXISTS'	=> 'Forum with that name already exists.',
 	'GROUP_ALREADY_EXISTS'	=> 'Group with that name already exists.',

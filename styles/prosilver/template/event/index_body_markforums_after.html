@@ -1,0 +1,76 @@
+<div class="action-bar bar-top">
+	<div class="pagination">
+		{{ lang('VIEW_FORUM_TOPICS', TOTAL_TOPICS) }}
+		{% if pagination %}
+			{% include 'pagination.html' %}
+		{% else %}
+			&bull; {{ PAGE_NUMBER }}
+		{% endif %}
+	</div>
+</div>
+
+{% if topicrow %}
+	<div class="forumbg">
+		<div class="inner">
+		<ul class="topiclist">
+			<li class="header">
+				<dl class="row-item">
+					<dt><div class="list-inner">{{ lang('TOPICS') }}</div></dt>
+					<dd class="posts">{{ lang('REPLIES') }}</dd>
+					<dd class="views">{{ lang('VIEWS') }}</dd>
+					<dd class="lastpost"><span>{{ lang('LAST_POST') }}</span></dd>
+				</dl>
+			</li>
+		</ul>
+		<ul class="topiclist topics">
+			{% for topic in topicrow %}
+				<li class="row{% if loop.index is even %} bg1{% else %} bg2{% endif %}">
+					<dl class="row-item {{ topic.TOPIC_IMG_STYLE }}">
+						<dt{% if topic.TOPIC_ICON_IMG and topic.S_TOPIC_ICONS %} style="background-image: url({{ T_ICONS_PATH }}{{ topic.TOPIC_ICON_IMG }}); background-repeat: no-repeat;"{% endif %} title="{{ topic.TOPIC_FOLDER_IMG_ALT }}">
+							{% if topic.S_UNREAD_TOPIC and not S_IS_BOT %}<a href="{{ topic.U_NEWEST_POST }}" class="row-item-link"></a>{% endif %}
+							<div class="list-inner">
+								{% if topic.S_UNREAD_TOPIC and not S_IS_BOT %}
+									<a class="unread" href="{{ topic.U_NEWEST_POST }}">
+										<i class="icon fa-file fa-fw icon-red icon-md" aria-hidden="true"></i>
+									</a>
+								{% endif %}
+								{% if topic.U_VIEW_TOPIC %}<a href="{{ topic.U_VIEW_TOPIC }}" class="topictitle">{{ topic.TOPIC_TITLE }}</a>{% else %}{{ topic.TOPIC_TITLE }}{% endif %}
+								<br />
+
+								{% if not S_IS_BOT %}
+								<div class="responsive-show" style="display: none;">
+									{{ lang('LAST_POST') }} {{ lang('POST_BY_AUTHOR') }} {{ topic.LAST_POST_AUTHOR_FULL }} &laquo; <a href="{{ topic.U_LAST_POST }}" title="{{ lang('GOTO_LAST_POST') }}">{{ topic.LAST_POST_TIME }}</a>
+									<br />{{ lang('POSTED') }} {{ lang('IN') }} <a href="{{ topic.U_VIEW_FORUM }}">{{ topic.FORUM_NAME }}</a>
+								</div>
+									{% if topic.REPLIES %}
+									<span class="responsive-show left-box" style="display: none;">{{ lang('REPLIES') }}{{ lang('COLON') }} <strong>{{ topic.REPLIES }}</strong></span>
+									{% endif %}
+								{% endif %}
+
+								<div class="topic-poster responsive-hide left-box">
+									{% if topic.S_HAS_POLL %}<i class="icon fa-bar-chart fa-fw" aria-hidden="true"></i>{% endif %}
+									{% if topic.ATTACH_ICON_IMG %}<i class="icon fa-paperclip fa-fw" aria-hidden="true"></i>{% endif %}
+									{{ lang('POST_BY_AUTHOR') }} {{ topic.TOPIC_AUTHOR_FULL }} &raquo; {{ topic.FIRST_POST_TIME }}
+									 &raquo; {{ lang('IN') }} <a href="{{ topic.U_VIEW_FORUM }}">{{ topic.FORUM_NAME }}</a>
+								</div>
+							</div>
+						</dt>
+						<dd class="posts">{{ topic.REPLIES }} <dfn>{{ lang('REPLIES') }}</dfn></dd>
+						<dd class="views">{{ topic.VIEWS }} <dfn>{{ lang('VIEWS') }}</dfn></dd>
+						<dd class="lastpost">
+							<span><dfn>{{ lang('LAST_POST') }} </dfn>{{ lang('POST_BY_AUTHOR') }} {{ topic.LAST_POST_AUTHOR_FULL }}
+								{% if not S_IS_BOT and topic.U_LAST_POST %}
+									<a href="{{ topic.U_LAST_POST }}" title="{{ lang('GOTO_LAST_POST') }}">
+										<i class="icon fa-external-link-square fa-fw icon-lightgray icon-md" aria-hidden="true"></i><span class="sr-only">{{ lang('VIEW_LATEST_POST') }}</span>
+									</a>
+								{% endif %}
+								<br />{{ topic.LAST_POST_TIME }}
+							</span>
+						</dd>
+					</dl>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+{% endif %}
