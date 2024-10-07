@@ -52,7 +52,9 @@ class select_controller
 			FROM ' . $this->user_groups_table . ' ug
 			LEFT JOIN ' . $this->groups_table . ' g
 				ON (g.group_id = ug.group_id)
-			WHERE ug.user_id = ' . (int) $this->user->data['user_id'];
+			WHERE g.group_type = 4
+            AND ug.user_id = ' . (int) $this->user->data['user_id']
+            ;
 		$result = $this->db->sql_query($sql);
 		$user_groups = [];
 		while ($row = $this->db->sql_fetchrow($result))
@@ -96,8 +98,9 @@ class select_controller
 		}
 
 		$sql = 'SELECT group_id, group_name
-			FROM ' . $this->groups_table . '
-			WHERE ' . $this->db->sql_in_set('group_name', constants::DEFAULT_GROUPS, true) . '
+			FROM ' . $this->groups_table . ' g
+			WHERE g.group_type = 4
+            AND ' . $this->db->sql_in_set('group_name', constants::DEFAULT_GROUPS, true) . '
 			ORDER BY group_name ASC';
 		$result = $this->db->sql_query($sql);
 		$groups = $this->db->sql_fetchrowset($result);
